@@ -1,8 +1,6 @@
 import { RxCross2 } from "react-icons/rx";
 
-export const DailogBox = (
-  setIsDeleteModalVisible: (isVisible: boolean) => void
-) => {
+export const DailogBox = () => {
   return (
     <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center backdrop-blur-sm">
       <div className=" w-[30rem] border-2 border-base-300 rounded-xl p-3 my-2 flex flex-col gap-6 bg-primary-content">
@@ -14,9 +12,7 @@ export const DailogBox = (
         </div>
         <div className="flex gap-3 justify-end">
           <button
-            onClick={() => {
-              setIsDeleteModalVisible(false);
-            }}
+            onClick={() => {}}
             className="border-2 border-base-300 rounded-lg py-1 px-6 text-primary"
           >
             Cancel
