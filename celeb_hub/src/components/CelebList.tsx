@@ -1,4 +1,5 @@
 import { CelebAccordion } from "./CelebAccordion";
+
 import celebsData from "../utils/celebrities.json";
 export const CelebList = () => {
   return (
