@@ -8,14 +8,12 @@ export const CelebDetails = ({
   celeb,
   isEditCelebDetails,
   activeCelebTab,
-  index,
   inputChangeHandler,
   setIsEditCelebDetails,
 }: {
   celeb: celebsData;
   isEditCelebDetails: boolean | null;
   activeCelebTab: number | null;
-  index: number;
   inputChangeHandler: (value: string) => void;
   setIsEditCelebDetails: (value: boolean) => void;
 }) => {
@@ -63,7 +61,7 @@ export const CelebDetails = ({
         <div>
           <p className=" text-neutral-500">Age</p>
           <p>
-            {isEditCelebDetails && activeCelebTab === index ? (
+            {isEditCelebDetails && activeCelebTab === celeb.id ? (
               <CustomInputTab
                 value={age}
                 onChange={(value: string) => inputChangeHandler(value)}
@@ -75,7 +73,7 @@ export const CelebDetails = ({
         </div>
         <div>
           <p className=" text-neutral-500">Gender</p>
-          {isEditCelebDetails && activeCelebTab === index ? (
+          {isEditCelebDetails && activeCelebTab === celeb.id ? (
             <details className="dropdown">
               <summary className="  border-2 border-base-300 rounded-lg px-4 py-1">
                 {celeb.gender}
@@ -102,7 +100,7 @@ export const CelebDetails = ({
         <div>
           <p className=" text-neutral-500">Country</p>
           <p>
-            {isEditCelebDetails && activeCelebTab === index ? (
+            {isEditCelebDetails && activeCelebTab === celeb.id ? (
               <CustomInputTab
                 value={celeb.country}
                 onChange={(value: string) => inputChangeHandler(value)}
@@ -117,7 +115,7 @@ export const CelebDetails = ({
       <div>
         <p className=" text-neutral-500">Description</p>
         <p>
-          {isEditCelebDetails && activeCelebTab === index ? (
+          {isEditCelebDetails && activeCelebTab === celeb.id ? (
             <textarea
               className=" border-2 border-base-300 rounded-xl px-2 py-1 focus:outline-none w-full h-[9rem]"
               defaultValue={celeb.description}
@@ -130,7 +128,7 @@ export const CelebDetails = ({
 
       {/* update & delete button */}
       <div className=" cursor-pointer text-blue-500 flex gap-6 items-center justify-end">
-        {isEditCelebDetails && activeCelebTab === index ? (
+        {isEditCelebDetails && activeCelebTab === celeb.id ? (
           <RxCrossCircled
             size="25px"
             color="red"
@@ -148,7 +146,7 @@ export const CelebDetails = ({
           />
         )}
 
-        {isEditCelebDetails && activeCelebTab === index ? (
+        {isEditCelebDetails && activeCelebTab === celeb.id ? (
           <AiOutlineCheckCircle
             size="25px"
             color="green"

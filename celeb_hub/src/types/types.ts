@@ -1,4 +1,5 @@
 export type celebsData = {
+  id: number;
   first: string;
   last: string;
   dob: string;
