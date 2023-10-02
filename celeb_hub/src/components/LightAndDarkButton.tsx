@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { BsMoonStars, BsSun } from "react-icons/bs";
-export const ToggleButton = () => {
+export const LightAndDarkButton = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const clickHandler = () => {
     setIsDarkMode(!isDarkMode);

@@ -1,4 +1,4 @@
-export type celebsData = {
+export type celebsTypes = {
   id: number;
   first: string;
   last: string;
@@ -9,14 +9,14 @@ export type celebsData = {
   gender: string;
 };
 export type CelebDetailsProps = {
-  celeb: celebsData[];
+  celeb: celebsTypes[];
   editCelebDetails: boolean;
   activeCelebTab: string;
   index: string;
   setEditCelebDetails: (value: boolean) => void;
 };
 export type CelebAccordionProps = {
-  celebsData: celebsData[];
+  celebsData: celebsTypes[];
 };
 
 export interface CustomInputProps {

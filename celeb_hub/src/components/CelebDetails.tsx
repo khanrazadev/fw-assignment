@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { celebsData } from "../types/types";
 import { RxCrossCircled } from "react-icons/rx";
 import { BsPencil, BsTrash3 } from "react-icons/bs";
 import { AiOutlineCheckCircle } from "react-icons/ai";
-import { DailogBox } from "./DailogBox";
+import { celebsTypes } from "../types/types";
+import { ConfirmationModal } from "./ConfirmationModal";
 export const CelebDetails = ({
   celeb,
   isEditCelebDetails,
@@ -11,7 +11,7 @@ export const CelebDetails = ({
   inputChangeHandler,
   setIsEditCelebDetails,
 }: {
-  celeb: celebsData;
+  celeb: celebsTypes;
   isEditCelebDetails: boolean | null;
   activeCelebTab: number | null;
   inputChangeHandler: (value: string) => void;
@@ -163,7 +163,7 @@ export const CelebDetails = ({
           />
         )}
       </div>
-      {isDeleteModalVisible && <DailogBox />}
+      {isDeleteModalVisible && <ConfirmationModal />}
     </>
   );
 };
