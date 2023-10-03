@@ -6,6 +6,7 @@ import { celebsTypes } from "../types/types";
 import { useDispatch } from "react-redux";
 import { editCeleb } from "../store/CelebiritySlice";
 import ConfirmationModal from "./ConfirmationModal";
+import { toast } from "react-hot-toast";
 
 interface CelebDetailsProps {
   celeb: celebsTypes;
@@ -54,6 +55,18 @@ const CelebDetails: React.FC<CelebDetailsProps> = ({
 
   const dobToAge = new Date().getFullYear() - new Date(celeb.dob).getFullYear();
   const age = dobToAge.toString();
+  function convertAgeToDob(age: number) {
+    if (age >= 0 && age < 150) {
+      // Add a reasonable age range
+      const currentYear = new Date().getFullYear();
+      const dobYear = currentYear - age;
+      const dob = new Date(dobYear, 0, 12); // Assuming January 1 for the date
+      return dob.toISOString().split("T")[0];
+    } else {
+      // Handle an invalid age input
+      return toast.error("Invalid Age");
+    }
+  }
 
   const isEditable = isEditCelebDetails && activeCelebTab === celeb.id;
 
@@ -63,41 +76,49 @@ const CelebDetails: React.FC<CelebDetailsProps> = ({
     if (parseInt(age) >= minimumEditingAge) {
       setIsEditCelebDetails(!isEditCelebDetails);
     } else {
-      alert("You may edit the user only if they are an adult.");
+      toast.error("You may edit the user only if they are an adult.");
     }
   };
 
   const saveEditedDetails = () => {
-    const updatedDetails: celebsTypes = {
-      id: celeb.id,
-      first: firstName || "",
-      last: lastName || "",
-      dob: celeb.dob,
-      gender: celeb.gender,
-      picture: celeb.picture,
-      country: celeb.country,
-      description: celeb.description,
-    };
+    try {
+      const updatedDetails: celebsTypes = {
+        id: celeb.id,
+        first: firstName || "",
+        last: lastName || "",
+        dob: celeb.dob,
+        gender: celeb.gender,
+        picture: celeb.picture,
+        country: celeb.country,
+        description: celeb.description,
+      };
 
-    const updateIfChanged = <K extends keyof Partial<celebsTypes>>(
-      key: K,
-      value: string
-    ) => {
-      if (isEditCelebDetails) {
-        if (value !== celeb[key]) {
-          updatedDetails[key] = value as celebsTypes[K];
+      const updateIfChanged = <K extends keyof Partial<celebsTypes>>(
+        key: K,
+        value: string
+      ) => {
+        if (isEditCelebDetails) {
+          if (value !== celeb[key]) {
+            updatedDetails[key] = value as celebsTypes[K];
+          }
         }
-      }
-    };
+      };
 
-    updateIfChanged("dob", inputAge);
-    updateIfChanged("gender", selectGender);
-    updateIfChanged("country", inputCountry);
-    updateIfChanged("description", inputDescription);
-    updateIfChanged("picture", picture);
+      updateIfChanged("dob", inputAge);
+      updateIfChanged("gender", selectGender);
+      updateIfChanged("country", inputCountry);
+      updateIfChanged("description", inputDescription);
+      updateIfChanged("picture", picture);
 
-    dispatch(editCeleb(updatedDetails));
-    setIsEditCelebDetails(false);
+      dispatch(editCeleb(updatedDetails));
+      setIsEditCelebDetails(false);
+
+      // Show a success toast if everything goes well.
+      toast.success("Updated successfully!");
+    } catch (error) {
+      // Show an error toast if an exception occurs.
+      toast.error("An error occurred while saving.");
+    }
   };
 
   const modalVisibilityHandler = () => {
@@ -108,7 +129,9 @@ const CelebDetails: React.FC<CelebDetailsProps> = ({
     if (isEditable) {
       switch (key) {
         case "inputAge":
-          setInputAge(value);
+          // Convert age to date when input changes
+          setInputAge(convertAgeToDob(parseInt(value, 10)));
+
           break;
         case "picture":
           setPicture(value);
@@ -149,7 +172,7 @@ const CelebDetails: React.FC<CelebDetailsProps> = ({
             {isEditable ? (
               <input
                 className="border-2 border-base-300 rounded-xl px-2 py-1 focus:outline-none w-28"
-                value={inputAge}
+                defaultValue={age}
                 type="number"
                 onChange={(e) => handleInputChange("inputAge", e.target.value)}
               />

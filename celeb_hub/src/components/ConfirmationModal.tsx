@@ -1,12 +1,14 @@
 import { useDispatch } from "react-redux";
 import { deleteCeleb } from "../store/CelebiritySlice";
 import { RxCross2 } from "react-icons/rx";
+import { toast } from "react-hot-toast";
 
 const ConfirmationModal = ({ celebId }: { celebId: number }) => {
   const dispatch = useDispatch();
 
   const deleteHandler = (celebId: number) => {
     dispatch(deleteCeleb(celebId));
+    toast.success("Celebs deleted successfully!");
   };
 
   return (
