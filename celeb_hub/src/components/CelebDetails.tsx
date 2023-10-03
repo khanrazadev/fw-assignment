@@ -39,6 +39,7 @@ const CelebDetails: React.FC<CelebDetailsProps> = ({
   const dispatch = useDispatch();
 
   const [inputAge, setInputAge] = useState<string>(celeb.dob.toString());
+  const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
   const [selectGender, setSelectGender] = useState<string>(celeb.gender);
   const [inputCountry, setInputCountry] = useState<string>(celeb.country);
   const [inputDescription, setInputDescription] = useState<string>(
@@ -82,33 +83,30 @@ const CelebDetails: React.FC<CelebDetailsProps> = ({
 
   const saveEditedDetails = () => {
     try {
+      // Check if any required fields are empty
+      const requiredFields = [
+        inputAge,
+        inputCountry,
+        inputDescription,
+        firstName,
+        lastName,
+        selectGender,
+      ];
+      if (requiredFields.some((field) => !field)) {
+        return toast.error("Fields cannot be empty");
+      }
+
+      //  updatedDetails object with the changed fields
       const updatedDetails: celebsTypes = {
         id: celeb.id,
         first: firstName || "",
         last: lastName || "",
-        dob: celeb.dob,
-        gender: celeb.gender,
-        picture: celeb.picture,
-        country: celeb.country,
-        description: celeb.description,
+        dob: isEditCelebDetails ? inputAge : celeb.dob,
+        gender: isEditCelebDetails ? selectGender : celeb.gender,
+        picture: picture || celeb.picture,
+        country: isEditCelebDetails ? inputCountry : celeb.country,
+        description: isEditCelebDetails ? inputDescription : celeb.description,
       };
-
-      const updateIfChanged = <K extends keyof Partial<celebsTypes>>(
-        key: K,
-        value: string
-      ) => {
-        if (isEditCelebDetails) {
-          if (value !== celeb[key]) {
-            updatedDetails[key] = value as celebsTypes[K];
-          }
-        }
-      };
-
-      updateIfChanged("dob", inputAge);
-      updateIfChanged("gender", selectGender);
-      updateIfChanged("country", inputCountry);
-      updateIfChanged("description", inputDescription);
-      updateIfChanged("picture", picture);
 
       dispatch(editCeleb(updatedDetails));
       setIsEditCelebDetails(false);
@@ -129,21 +127,34 @@ const CelebDetails: React.FC<CelebDetailsProps> = ({
     if (isEditable) {
       switch (key) {
         case "inputAge":
-          // Convert age to date when input changes
-          setInputAge(convertAgeToDob(parseInt(value, 10)));
+          if (value === "") {
+            setInputAge(""); // Handle empty input
+          } else {
+            // Convert age to date when input changes
+            setInputAge(convertAgeToDob(parseInt(value, 10)));
+            setIsButtonDisabled(false);
+          }
 
           break;
         case "picture":
           setPicture(value);
+          setIsButtonDisabled(false);
+
           break;
         case "selectGender":
           setSelectGender(value);
+          setIsButtonDisabled(false);
+
           break;
         case "inputCountry":
           setInputCountry(value);
+          setIsButtonDisabled(false);
+
           break;
         case "inputDescription":
           setInputDescription(value);
+          setIsButtonDisabled(false);
+
           break;
         default:
           break;
@@ -253,11 +264,19 @@ const CelebDetails: React.FC<CelebDetailsProps> = ({
           />
         )}
         {isEditable ? (
-          <AiOutlineCheckCircle
-            size="25px"
-            color="green"
-            onClick={saveEditedDetails}
-          />
+          isButtonDisabled ? (
+            <button disabled className=" cursor-not-allowed">
+              <AiOutlineCheckCircle size="25px" color="grey" />
+            </button>
+          ) : (
+            <button>
+              <AiOutlineCheckCircle
+                size="25px"
+                color="green"
+                onClick={saveEditedDetails}
+              />
+            </button>
+          )
         ) : (
           <BsPencil
             size="20px"
