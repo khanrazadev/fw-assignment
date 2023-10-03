@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { BsSearch } from "react-icons/bs";
 import { useSelector } from "react-redux";
-import { CelebAccordion } from "./components/CelebAccordion";
-import { LightAndDarkButton } from "./components/LightAndDarkButton";
+import { BsSearch } from "react-icons/bs";
 import { getCelebsData } from "./store/CelebiritySlice";
 import { celebsTypes } from "./types/types";
+import CelebAccordion from "./components/CelebAccordion";
+import { LightAndDarkButton } from "./components/LightAndDarkButton";
 
 function App() {
   const celebsData = useSelector(getCelebsData);
@@ -37,7 +37,7 @@ function App() {
   );
 }
 
-export const SearchBar: React.FC<{
+const SearchBar: React.FC<{
   searchInput: string;
   setSearchInput: React.Dispatch<React.SetStateAction<string>>;
 }> = (props) => {
@@ -52,7 +52,7 @@ export const SearchBar: React.FC<{
         <BsSearch color="grey" />
         <input
           className="bg-transparent text-primary focus:outline-none w-full italic placeholder-neutral-400"
-          placeholder="search celebs"
+          placeholder="Search celebs"
           value={searchInput}
           onChange={handleInputChange}
         />

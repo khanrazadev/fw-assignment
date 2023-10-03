@@ -1,9 +1,17 @@
+import { useDispatch } from "react-redux";
+import { deleteCeleb } from "../store/CelebiritySlice";
 import { RxCross2 } from "react-icons/rx";
 
-export const ConfirmationModal = () => {
+const ConfirmationModal = ({ celebId }: { celebId: number }) => {
+  const dispatch = useDispatch();
+
+  const deleteHandler = (celebId: number) => {
+    dispatch(deleteCeleb(celebId));
+  };
+
   return (
     <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center backdrop-blur-sm">
-      <div className=" w-[30rem] border-2 border-base-300 rounded-xl p-3 my-2 flex flex-col gap-6 bg-primary-content">
+      <div className="w-[30rem] border-2 border-base-300 rounded-xl p-3 my-2 flex flex-col gap-6 bg-primary-content">
         <div className="flex justify-between items-center text-neutral-400 px-4">
           <p className="text-primary">Are you sure you want to delete?</p>
           <button>
@@ -17,7 +25,12 @@ export const ConfirmationModal = () => {
           >
             Cancel
           </button>
-          <button className="rounded-lg py-1 px-6 bg-red-500 text-gray-50">
+          <button
+            onClick={() => {
+              deleteHandler(celebId);
+            }}
+            className="rounded-lg py-1 px-6 bg-red-500 text-gray-50"
+          >
             Delete
           </button>
         </div>
@@ -25,3 +38,5 @@ export const ConfirmationModal = () => {
     </div>
   );
 };
+
+export default ConfirmationModal;
