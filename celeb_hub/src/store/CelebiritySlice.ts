@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { celebsTypes } from "../types/types";
 import { RootState } from "./store";
-import celebsDataJsonList from "../utils/celebrities.json";
+import celebsDataJsonList from "../celebrities.json";
 interface CelebsState {
   celebs: celebsTypes[];
 }
